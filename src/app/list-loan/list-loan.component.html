@@ -1,0 +1,70 @@
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Lista de Empréstimos</h2>
+  <div *ngIf="loans.length > 0; else noLoans">
+    <div class="card mb-3" *ngFor="let loan of loans">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>
+          Empréstimo: {{ loan.id }} - Moeda:
+          <span class="badge bg-primary ms-2">{{ loan.currency }}</span>
+        </h5>
+        <button 
+          class="btn btn-danger btn-sm" 
+          (click)="deleteLoan(loan.id)">
+          Excluir
+        </button>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong>Cliente:</strong> {{ loan.client_name }}</p>
+            <p><strong>Tipo de Empréstimo:</strong> {{ loan.loanType }}</p>
+            <p><strong>Data de Início:</strong> {{ loan.date_start }}</p>
+            <p><strong>Data de Término:</strong> {{ loan.date_end }}</p>
+          </div>
+          <div class="col-md-6">
+            <p><strong>Valor Inicial:</strong> {{ loan.amount_pv | currency: loan.currency }}</p>
+            <p><strong>Valor Ajustado:</strong> {{ loan.ajustedAmount | currency: 'BRL':'symbol' }}</p>
+            <p><strong>Total do Empréstimo:</strong> {{ loan.total_loan | currency: 'BRL':'symbol' }}</p>
+          </div>
+        </div>
+        <button 
+          class="btn btn-link text-decoration-none mt-3" 
+          (click)="toggleInstallments(loan.id)">
+          {{ loan.showInstallments ? 'Ocultar Detalhes' : 'Mostrar Detalhes' }}
+        </button>
+
+        <!-- Exibir Parcelas apenas se a variável showInstallments for verdadeira -->
+        <div *ngIf="loan.showInstallments">
+          <p><strong>Parcelas:</strong></p>
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Juros</th>
+                  <th>Amortização</th>
+                  <th>Valor da Parcela</th>
+                  <th>Saldo Restante</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let installment of loan.installments">
+                  <td>{{ installment.installmentNumber }}</td>
+                  <td>{{ installment.interest | currency: 'BRL':'symbol' }}</td>
+                  <td>{{ installment.amortization | currency: 'BRL':'symbol' }}</td>
+                  <td>{{ installment.installmentValue | currency: 'BRL':'symbol' }}</td>
+                  <td>{{ installment.remainingBalance | currency: 'BRL':'symbol' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Template para quando não houver empréstimos -->
+  <ng-template #noLoans>
+    <p class="text-center text-muted">Nenhum empréstimo encontrado.</p>
+  </ng-template>
+</div>

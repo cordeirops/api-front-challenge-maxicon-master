@@ -1,0 +1,14 @@
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  .card-header {
+    background-color: #f8f9fa;
+    font-weight: bold;
+  }
+  
+  .table {
+    margin-top: 20px;
+  }
+  

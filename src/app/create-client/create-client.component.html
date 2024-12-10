@@ -1,0 +1,85 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h2 class="text-center mb-4">Cadastro de Cliente</h2>
+      
+      <!-- Exibir a mensagem de sucesso -->
+      <div *ngIf="successMessage" class="alert alert-success" role="alert">
+        {{ successMessage }}
+      </div>
+
+      <!-- Formulário com ngForm -->
+      <form #clientForm="ngForm" (ngSubmit)="onSubmit(clientForm)">
+        <!-- Nome -->
+        <div class="mb-3">
+          <label for="name" class="form-label">Nome</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="name" 
+            placeholder="Digite o nome" 
+            [(ngModel)]="client.name" 
+            name="name" 
+            required>
+          <div *ngIf="clientForm.submitted && !client.name" class="text-danger">Nome é obrigatório</div>
+        </div>
+
+        <!-- Idade -->
+        <div class="mb-3">
+          <label for="age" class="form-label">Idade</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            id="age" 
+            placeholder="Digite a idade" 
+            [(ngModel)]="client.age" 
+            name="age" 
+            [min]="18" 
+            required
+            (ngModelChange)="validateAge()">
+          
+          <!-- Exibe a mensagem de erro somente quando a idade for inválida (menor que 18) -->
+          <div *ngIf="invalidAge" class="text-danger">Idade deve ser maior ou igual a 18</div>
+        </div>
+
+
+        <!-- Email -->
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input 
+            type="email" 
+            class="form-control" 
+            id="email" 
+            placeholder="Digite o email" 
+            [(ngModel)]="client.email" 
+            name="email" 
+            required>
+          <div *ngIf="clientForm.submitted && !client.email" class="text-danger">Email é obrigatório</div>
+        </div>
+
+        <!-- CPF -->
+        <div class="mb-3">
+          <label for="cpf" class="form-label">CPF</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="cpf" 
+            placeholder="Digite o CPF" 
+            [(ngModel)]="client.cpf" 
+            name="cpf" 
+            required 
+            maxlength="14" 
+            (input)="formatCPF($event)">
+          <div *ngIf="clientForm.submitted && !client.cpf" class="text-danger">CPF é obrigatório</div>
+          <div *ngIf="clientForm.submitted && client.cpf?.length !== 14" class="text-danger">CPF deve ter 11 caracteres</div>
+        </div>
+        
+        <!-- Botões -->
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-success">Salvar</button>
+          <button type="reset" class="btn btn-secondary">Limpar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
